@@ -47,7 +47,8 @@ void setup() {
 void loop() {
   int AXIS_X = analogRead(xAxis);
   int AXIS_Y = analogRead(yAxis);
-  joyStick();
+  int AXIS_D = digitalRead(dAxis);
+  joyStick(AXIS_D);
   joyStickXY(AXIS_X, xyLeft, xyRight);
   joyStickXY(AXIS_Y, xyUp, xyDown);
   key(button1, bt1);
@@ -63,9 +64,8 @@ void loop() {
 }
 
 //조이스틱 누름
-void joyStick(){
-    int AXIS_D = digitalRead(dAxis);
-    if(AXIS_D == 0){
+void joyStick(int joyClick){
+    if(joyClick == 0){
        Keyboard.press(xyReturn);
     }
     else{
