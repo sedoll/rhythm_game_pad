@@ -3,16 +3,16 @@
 const byte xAxis = A1;
 const byte yAxis = A0;
 const byte dAxis = 12;
-const short button1 = 2;
-const short button2 = 3;
-const short button3 = 4;
-const short button4 = 5;
-const short button5 = 6;
-const short button6 = 7;
-const short button7 = 8;
-const short button8 = 9;
-const short button9 = 10;
-const short button10 = 11;
+const byte button1 = 2;
+const byte button2 = 3;
+const byte button3 = 4;
+const byte button4 = 5;
+const byte button5 = 6;
+const byte button6 = 7;
+const byte button7 = 8;
+const byte button8 = 9;
+const byte button9 = 10;
+const byte button10 = 11;
 const char bt1 = 'n';
 const char bt2 = 'l';
 const char bt3 = 'k';
@@ -47,8 +47,9 @@ void setup() {
 void loop() {
   int AXIS_X = analogRead(xAxis);
   int AXIS_Y = analogRead(yAxis);
-  joyStick(AXIS_X, xyLeft, xyRight);
-  joyStick(AXIS_Y, xyUp, xyDown);
+  joyStick();
+  joyStickXY(AXIS_X, xyLeft, xyRight);
+  joyStickXY(AXIS_Y, xyUp, xyDown);
   key(button1, bt1);
   key(button2, bt2);
   key(button3, bt3);
@@ -61,17 +62,19 @@ void loop() {
   key(button10, bt10);
 }
 
-void joyStick(int joyXY, char direc1, char direc2){
+//조이스틱 누름
+void joyStick(){
     int AXIS_D = digitalRead(dAxis);
-    //조이스틱 눌림 
     if(AXIS_D == 0){
        Keyboard.press(xyReturn);
     }
     else{
        Keyboard.release(xyReturn);
     }
-    
-    //x, y축 방향값
+}
+
+//조이스틱 이동
+void joyStickXY(int joyXY, char direc1, char direc2){
     if(joyXY<=150){
        Keyboard.press(direc1);
     }
@@ -84,7 +87,8 @@ void joyStick(int joyXY, char direc1, char direc2){
     }
 }
 
-void key(short btn, char selct){
+//버튼 누름
+void key(byte btn, char selct){
   if(!digitalRead(btn)){
     Keyboard.press(selct); //키보드가 눌렸다.
   } else{
