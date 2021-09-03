@@ -1,46 +1,17 @@
 #include "Keyboard.h"
 
-const byte xAxis = A1;
-const byte yAxis = A0;
-const byte dAxis = 12;
-const byte button1 = 2;
-const byte button2 = 3;
-const byte button3 = 4;
-const byte button4 = 5;
-const byte button5 = 6;
-const byte button6 = 7;
-const byte button7 = 8;
-const byte button8 = 9;
-const byte button9 = 10;
-const byte button10 = 11;
-const char bt1 = 'n';
-const char bt2 = 'l';
-const char bt3 = 'k';
-const char bt4 = 'j';
-const char bt5 = KEY_RIGHT_SHIFT;
-const char bt6 = KEY_LEFT_SHIFT;
-const char bt7 = 'd';
-const char bt8 = 's';
-const char bt9 = 'a';
-const char bt10 = KEY_ESC;
-const char xyReturn = KEY_RETURN;
-const char xyLeft = KEY_LEFT_ARROW;
-const char xyRight = KEY_RIGHT_ARROW;
-const char xyUp = KEY_UP_ARROW;
-const char xyDown = KEY_DOWN_ARROW;
+const byte xAxis = A1; //조이스틱 x축 아날로그 핀 번호
+const byte yAxis = A0; //조이스틱 y축 아날로그 핀 번호
+const byte dAxis = 12; //조이스틱 버튼 핀 번호s
+const byte button[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; //버튼 입력 핀 번호
+const char bt[] = {'n', 'l', 'k', 'j', KEY_RIGHT_SHIFT, KEY_LEFT_SHIFT, 'd', 's', 'a', KEY_ESC}; //버튼 입력키
+const char joyArrow[] = {KEY_RETURN, KEY_LEFT_ARROW, KEY_RIGHT_ARROW, KEY_UP_ARROW, KEY_DOWN_ARROW}; //조이스틱 방향키
 
 void setup() {                                                                                                                                                                                             
   Keyboard.begin();
-  pinMode(button1, INPUT_PULLUP);
-  pinMode(button2, INPUT_PULLUP);
-  pinMode(button3, INPUT_PULLUP);
-  pinMode(button4, INPUT_PULLUP);
-  pinMode(button5, INPUT_PULLUP);
-  pinMode(button6, INPUT_PULLUP);
-  pinMode(button7, INPUT_PULLUP);
-  pinMode(button8, INPUT_PULLUP);
-  pinMode(button9, INPUT_PULLUP);
-  pinMode(button10, INPUT_PULLUP);
+  for(int i=0; i<10; i++){ //2~11번까지의 디지털 핀 사용 선언
+    pinMode(button[i], INPUT_PULLUP);
+  }
   pinMode(dAxis, INPUT_PULLUP);
 }
 
@@ -48,28 +19,21 @@ void loop() {
   int AXIS_X = analogRead(xAxis);
   int AXIS_Y = analogRead(yAxis);
   int AXIS_D = digitalRead(dAxis);
-  joyStick(AXIS_D);
-  joyStickXY(AXIS_X, xyLeft, xyRight);
-  joyStickXY(AXIS_Y, xyUp, xyDown);
-  key(button1, bt1);
-  key(button2, bt2);
-  key(button3, bt3);
-  key(button4, bt4);
-  key(button5, bt5);
-  key(button6, bt6);
-  key(button7, bt7);
-  key(button8, bt8);
-  key(button9, bt9);
-  key(button10, bt10);
+  joyStick(AXIS_D, joyArrow[0]);
+  joyStickXY(AXIS_X, joyArrow[1], joyArrow[2]);
+  joyStickXY(AXIS_Y, joyArrow[3], joyArrow[4]);
+  for(int i=0; i<10; i++){
+    key(button[i], bt[i]);
+  }
 }
 
 //조이스틱 누름
-void joyStick(int joyClick){
+void joyStick(int joyClick, char direc){
     if(joyClick == 0){
-       Keyboard.press(xyReturn);
+       Keyboard.press(direc);
     }
     else{
-       Keyboard.release(xyReturn);
+       Keyboard.release(direc);
     }
 }
 
